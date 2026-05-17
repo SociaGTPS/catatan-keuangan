@@ -394,7 +394,7 @@
                     ℹ️ Seluruh input data di atas akan otomatis diproses, divalidasi, dan dihitung secara realtime ke dalam tabel <b>Laporan Bersih</b> dan log transaksi <b>Sheet1</b> pada Google Sheets Anda.
                 </div>
                 <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 12px;">
-                    <a href="https://script.google.com/macros/s/AKfycbxEh-M2SPvBPFvOo41PQQxsj5A3jfUNCa5RjXiIAhZaYIAos-lpXpJEPcDcNQ-Fy2Y/exec" target="_blank" class="btn-submit" style="text-align: center; text-decoration: none; background: #2e7d32;">
+                    <a href="https://script.google.com/macros/s/AKfycbx8ZqYDhoW05L3YcHnU462l3UK2m_wddX1zOsmWEBvnkMLawdeHnEJddoX2I4X7pXHo/exec" target="_blank" class="btn-submit" style="text-align: center; text-decoration: none; background: #2e7d32;">
                         🟢 Buka Aplikasi Web (Web App Exec)
                     </a>
                     <a href="https://docs.google.com/spreadsheets/d/1SnDRFwt9fumyYriEMS07gK4ext-EdMTL_jPZoUGSyz1Tl7QBuZLGO-Oa/edit" target="_blank" class="btn-submit" style="text-align: center; text-decoration: none; background: #424242;">
@@ -413,8 +413,8 @@
     <div id="statusMessage"></div>
 
     <script>
-        // KODE SENDER YANG DIPERBAIKI (MENGGUNAKAN METODE URLENCODED AGAR MENEMBUS FILTER GOOGLE GSHEET)
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxEh-M2SPvBPFvOo41PQQxsj5A3jfUNCa5RjXiIAhZaYIAos-lpXpJEPcDcNQ-Fy2Y/exec";
+        // UPDATE URL WEB APP SESUAI INPUT TERBARU ANDA
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx8ZqYDhoW05L3YcHnU462l3UK2m_wddX1zOsmWEBvnkMLawdeHnEJddoX2I4X7pXHo/exec";
 
         window.onload = function() {
             const today = new Date().toISOString().split('T')[0];
@@ -491,7 +491,6 @@
                 urlParams.append("tanggal_asli", rawDate);
             }
 
-            // PERBAIKAN UTAMA: Menggunakan metode kirim data form-urlencoded agar lolos CORS Google Script tanpa API Gateway tambahan
             fetch(WEB_APP_URL, {
                 method: "POST",
                 mode: "no-cors",
