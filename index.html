@@ -91,7 +91,7 @@
                     <textarea id="keterangan" placeholder="Contoh: Beli sabun salju merk X atau Cuci harian admin" class="w-full border p-2.5 rounded-lg text-sm h-16" required></textarea>
                 </div>
 
-                <button type="submit" class="w-full bg-gray-900 text-white py-2.5 rounded-lg text-sm font-semibold hover:bg-gray-800 transition-colors shadow">
+                <button id="btnSimpan" type="submit" class="w-full bg-gray-900 text-white py-2.5 rounded-lg text-sm font-semibold hover:bg-gray-800 transition-colors shadow">
                     Simpan Catatan Cabang
                 </button>
             </form>
@@ -99,7 +99,7 @@
 
         <div class="px-4">
             <div class="flex justify-between items-center mb-2">
-                <h3 class="text-sm font-bold text-gray-700">Riwayat Transaksi</h3>
+                <h3 class="text-sm font-bold text-gray-700">Riwayat Catatan Hari Ini</h3>
                 <button id="btnEkspor" class="text-xs bg-green-600 text-white px-3 py-1 rounded shadow-sm font-medium hidden">
                     Unduh Excel (.CSV)
                 </button>
@@ -111,11 +111,15 @@
     </div>
 
     <script>
+        // Link Aplikasi Web Google Sheets milik Owner Steam MP 7000
+        const URL_GOOGLE_SHEETS = "https://script.google.com/macros/s/AKfycbxEh-M2SPvBPFvOo41PQQxsj5A3jfUNCa5RjXiIAhZaYIAos-lpXpJEPcDcNQ-Fy2Y/exec";
+
         let transaksi = JSON.parse(localStorage.getItem('data_keuangan_mp7000')) || [];
 
         const form = document.getElementById('formKeuangan');
         const daftarContainer = document.getElementById('daftarTransaksi');
         const btnEkspor = document.getElementById('btnEkspor');
+        const btnSimpan = document.getElementById('btnSimpan');
 
         function aturFormTipe() {
             const tipe = document.getElementById('tipe').value;
@@ -183,6 +187,9 @@
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             
+            btnSimpan.innerText = "Mengirim data...";
+            btnSimpan.disabled = true;
+
             const tipe = document.getElementById('tipe').value;
             let kalkulasiNominal = 0;
             let unitMasuk = null;
@@ -199,7 +206,7 @@
             const dataBaru = {
                 id: 'trx_' + Date.now(),
                 cabang: document.getElementById('cabang').value,
-                tanggal: new Date().toLocaleDateString('id-ID', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'}),
+                tanggal: new Date().toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit'}),
                 tipe: tipe,
                 nominal: kalkulasiNominal,
                 unit: unitMasuk,
@@ -207,17 +214,38 @@
                 keterangan: document.getElementById('keterangan').value
             };
 
-            transaksi.unshift(dataBaru);
-            localStorage.setItem('data_keuangan_mp7000', JSON.stringify(transaksi));
-            form.reset();
-            document.getElementById('jumlahUnit').value = '';
-            document.getElementById('nominal').value = '';
-            aturFormTipe();
-            updateTampilan();
+            // Kirim data langsung ke Google Sheets Pusat secara Real-time
+            fetch(URL_GOOGLE_SHEETS, {
+                method: 'POST',
+                mode: 'no-cors', // Mencegah eror CORS di browser agar pengiriman mulus
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dataBaru)
+            })
+            .then(() => {
+                transaksi.unshift(dataBaru);
+                localStorage.setItem('data_keuangan_mp7000', JSON.stringify(transaksi));
+                alert("Data berhasil terkirim ke Google Sheets pusat!");
+                
+                form.reset();
+                document.getElementById('jumlahUnit').value = '';
+                document.getElementById('nominal').value = '';
+                aturFormTipe();
+                updateTampilan();
+            })
+            .catch(err => {
+                alert("Gagal kirim ke Google Sheets, tapi data tersimpan sementara di HP.");
+                transaksi.unshift(dataBaru);
+                localStorage.setItem('data_keuangan_mp7000', JSON.stringify(transaksi));
+                updateTampilan();
+            })
+            .finally(() => {
+                btnSimpan.innerText = "Simpan Catatan Cabang";
+                btnSimpan.disabled = false;
+            });
         });
 
         function hapusData(id) {
-            if (confirm('Hapus catatan ini?')) {
+            if (confirm('Hapus catatan ini dari HP? (Catatan di Google Sheets pusat tidak akan terhapus)')) {
                 transaksi = transaksi.filter(item => item.id !== id);
                 localStorage.setItem('data_keuangan_mp7000', JSON.stringify(transaksi));
                 updateTampilan();
