@@ -9,101 +9,87 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: Arial, sans-serif;
         }
         body {
-            background: linear-gradient(135deg, #e0eafc, #cfdef3);
+            background-color: #eef2f3;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 20px;
+            padding: 15px;
         }
-        .wrapper {
+        .container {
             background: #ffffff;
-            padding: 30px 25px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             width: 100%;
-            max-width: 400px;
+            max-width: 380px;
         }
         h2 {
             text-align: center;
             color: #1e3c72;
-            margin-bottom: 6px;
-            font-size: 24px;
-            font-weight: 700;
+            margin-bottom: 5px;
+            font-size: 22px;
         }
-        .sub-header {
+        .sub {
             text-align: center;
             color: #666;
             font-size: 13px;
-            margin-bottom: 25px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            margin-bottom: 20px;
         }
-        .form-control {
-            margin-bottom: 16px;
+        .form-group {
+            margin-bottom: 14px;
         }
         label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
             font-size: 13px;
-            font-weight: 600;
+            font-weight: bold;
             color: #333;
         }
         select, input, textarea {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #dcdcdc;
-            border-radius: 10px;
-            font-size: 15px;
-            background-color: #f9f9f9;
-            color: #333;
-            transition: all 0.3s ease;
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: #fafafa;
         }
         select:focus, input:focus, textarea:focus {
             border-color: #1e3c72;
-            background-color: #fff;
             outline: none;
-            box-shadow: 0 0 0 3px rgba(30, 60, 114, 0.15);
+            background-color: #fff;
         }
         button {
             width: 100%;
-            padding: 14px;
-            background: linear-gradient(to right, #1e3c72, #2a5298);
+            padding: 13px;
+            background: #1e3c72;
             color: white;
             border: none;
-            border-radius: 10px;
-            font-size: 16px;
+            border-radius: 8px;
+            font-size: 15px;
             font-weight: bold;
             cursor: pointer;
             margin-top: 10px;
-            box-shadow: 0 5px 15px rgba(30, 60, 114, 0.3);
-            transition: all 0.3s ease;
-        }
-        button:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 7px 20px rgba(30, 60, 114, 0.4);
         }
         button:disabled {
-            background: #cccccc;
-            box-shadow: none;
+            background-color: #ccc;
             cursor: not-allowed;
-            transform: none;
         }
     </style>
 </head>
 <body>
 
-    <div class="wrapper">
+    <div class="container">
         <h2>Steam MP 7000</h2>
-        <div class="sub-header font-track">Input Keuangan Cabang</div>
+        <div class="sub">Input Keuangan Cabang</div>
 
         <form id="financeForm">
-            <div class="form-control">
+            <div class="form-group">
                 <label>Pilih Cabang</label>
-                <select id="cabang" name="cabang" required>
+                <select id="cabang" required>
                     <option value="" disabled selected>-- Pilih Cabang --</option>
                     <option value="Grobogan">Grobogan</option>
                     <option value="Palis">Palis</option>
@@ -111,33 +97,33 @@
                 </select>
             </div>
 
-            <div class="form-control">
+            <div class="form-group">
                 <label>Tipe Transaksi</label>
-                <select id="tipe" name="tipe" required>
+                <select id="tipe" required>
                     <option value="" disabled selected>-- Pilih Tipe --</option>
                     <option value="Pemasukan">Pemasukan (Uang Masuk)</option>
                     <option value="Pengeluaran">Pengeluaran (Uang Keluar)</option>
                 </select>
             </div>
 
-            <div class="form-control">
-                <label>Kategori / Nama Item</label>
-                <input type="text" id="kategori" name="kategori" placeholder="Contoh: Cuci Motor, Beli Sabun" required>
+            <div class="form-group">
+                <label>Kategori / Item</label>
+                <input type="text" id="kategori" placeholder="Contoh: Cuci Motor, Beli Sabun" required>
             </div>
 
-            <div class="form-control">
+            <div class="form-group">
                 <label>Jumlah Unit</label>
-                <input type="number" id="unit" name="unit" placeholder="Contoh: 1" required min="1">
+                <input type="number" id="unit" placeholder="Contoh: 1" required min="1">
             </div>
 
-            <div class="form-control">
+            <div class="form-group">
                 <label>Total Nominal (Rp)</label>
-                <input type="number" id="nominal" name="nominal" placeholder="Contoh: 50000 (Tanpa Titik)" required min="0">
+                <input type="number" id="nominal" placeholder="Contoh: 50000" required min="0">
             </div>
 
-            <div class="form-control">
-                <label>Keterangan Tambahan</label>
-                <textarea id="keterangan" name="keterangan" placeholder="Catatan opsional jika ada..." rows="2"></textarea>
+            <div class="form-group">
+                <label>Keterangan (Opsional)</label>
+                <textarea id="keterangan" placeholder="Catatan tambahan jika ada..." rows="2"></textarea>
             </div>
 
             <button type="submit" id="btnSimpan">SIMPAN DATA</button>
@@ -152,31 +138,31 @@
             const btn = document.getElementById('btnSimpan');
             
             btn.disabled = true;
-            btn.innerText = "Memproses Data...";
+            btn.innerText = "Mengirim...";
 
-            // Menggunakan URLSearchParams agar data terkirim mulus ke Apps Script tanpa hambatan CORS
-            constformData = new URLSearchParams();
-            formData.append('cabang', document.getElementById('cabang').value);
-            formData.append('tipe', document.getElementById('tipe').value);
-            formData.append('kategori', document.getElementById('kategori').value);
-            formData.append('unit', document.getElementById('unit').value);
-            formData.append('nominal', document.getElementById('nominal').value);
-            formData.append('keterangan', document.getElementById('keterangan').value);
+            // Menggunakan URLSearchParams agar data dipaksa masuk ke Google Apps Script tanpa hambatan
+            const dataData = new URLSearchParams();
+            dataData.append('cabang', document.getElementById('cabang').value);
+            dataData.append('tipe', document.getElementById('tipe').value);
+            dataData.append('kategori', document.getElementById('kategori').value);
+            dataData.append('unit', document.getElementById('unit').value);
+            dataData.append('nominal', document.getElementById('nominal').value);
+            dataData.append('keterangan', document.getElementById('keterangan').value);
 
             fetch(urlAppsScript, {
                 method: 'POST',
-                body: formData,
+                body: dataData,
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 }
             })
-            .then(response => {
-                alert(`Sip! Data Cabang ${document.getElementById('cabang').value} Berhasil Masuk Ke Sheets!`);
+            .then(() => {
+                alert("Mantap! Data Berhasil Disimpan.");
                 document.getElementById('financeForm').reset();
             })
             .catch((error) => {
                 console.error('Error:', error);
-                alert('Gagal mengirim data, silakan cek jaringan Anda!');
+                alert("Waduh, Gagal mengirim data!");
             })
             .finally(() => {
                 btn.disabled = false;
