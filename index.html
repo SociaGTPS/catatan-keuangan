@@ -413,133 +413,109 @@
     <div id="statusMessage"></div>
 
     <script>
-        // MASUKKAN URL GOOGLE APP SCRIPT WEB APP SENDER DI SINI
+        // KODE SENDER YANG DIPERBAIKI (MENGGUNAKAN METODE URLENCODED AGAR MENEMBUS FILTER GOOGLE GSHEET)
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxEh-M2SPvBPFvOo41PQQxsj5A3jfUNCa5RjXiIAhZaYIAos-lpXpJEPcDcNQ-Fy2Y/exec";
 
-        // Set default date ke hari ini saat web dibuka
         window.onload = function() {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('tgl_pemasukan').value = today;
             document.getElementById('tgl_pengeluaran').value = today;
         };
 
-        // Fungsi Ganti Tab Menu
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            
             document.getElementById(tabId).classList.add('active');
             event.currentTarget.classList.add('active');
         }
 
-        // Hitung Otomatis Kotor Owner Berdasarkan Jumlah Unit (1 Unit = 4000)
         function hitungKotor() {
             const unitInput = document.getElementById('unit_pemasukan').value;
             const tarifPerUnit = 4000;
             const totalNominal = unitInput ? parseInt(unitInput) * tarifPerUnit : 0;
-            
             document.getElementById('nominal_pemasukan').value = totalNominal;
             document.getElementById('nominal_pemasukan_display').value = "Rp " + totalNominal.toLocaleString('id-ID');
         }
 
-        // Tampilkan Pesan Status (Toast)
         function showStatus(text, type) {
             const msgBox = document.getElementById('statusMessage');
             msgBox.innerText = text;
-            msgBox.className = ''; // reset class
-            
+            msgBox.className = ''; 
             if(type === 'success') msgBox.classList.add('status-success');
             else if(type === 'error') msgBox.classList.add('status-error');
             else if(type === 'loading') msgBox.classList.add('status-loading');
-            
             msgBox.style.display = 'block';
-            
             if(type !== 'loading') {
-                setTimeout(() => {
-                    msgBox.style.display = 'none';
-                }, 4000);
+                setTimeout(() => { msgBox.style.display = 'none'; }, 4000);
             }
         }
 
-        // Kirim Data Form Ke Google Apps Script Web App
         function submitData(event, tipeForm) {
             event.preventDefault();
+            let btnSubmit, urlParams = new URLSearchParams();
             
-            let btnSubmit, formData = {};
             const formatTglLokal = (tglStr) => {
                 if(!tglStr) return "";
                 const d = new Date(tglStr);
                 return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth()+1).padStart(2, '0')}/${d.getFullYear()}`;
             };
 
-            showStatus("Sedang mengirim data ke Google Sheets...", "loading");
+            showStatus("Sedang menyimpan data ke Google Sheets...", "loading");
+
+            urlParams.append("action", "insertRow");
+            urlParams.append("tipe", tipeForm);
 
             if (tipeForm === 'Pemasukan') {
                 btnSubmit = document.getElementById('btn_submit_pemasukan');
                 btnSubmit.disabled = true;
-
                 const rawDate = document.getElementById('tgl_pemasukan').value;
-                formData = {
-                    action: "insertRow",
-                    tanggal: formatTglLokal(rawDate),
-                    cabang: document.getElementById('cabang_pemasukan').value,
-                    tipe: "Pemasukan",
-                    kategori: "Pemasukan Unit",
-                    unit: parseInt(document.getElementById('unit_pemasukan').value),
-                    nominal: parseInt(document.getElementById('nominal_pemasukan').value),
-                    keterangan: document.getElementById('ket_pemasukan').value || "Pemasukan rutin",
-                    tanggal_asli: rawDate
-                };
+                
+                urlParams.append("tanggal", formatTglLokal(rawDate));
+                urlParams.append("cabang", document.getElementById('cabang_pemasukan').value);
+                urlParams.append("kategori", "Pemasukan Unit");
+                urlParams.append("unit", document.getElementById('unit_pemasukan').value);
+                urlParams.append("nominal", document.getElementById('nominal_pemasukan').value);
+                urlParams.append("keterangan", document.getElementById('ket_pemasukan').value || "Pemasukan rutin");
+                urlParams.append("tanggal_asli", rawDate);
             } else {
                 btnSubmit = document.getElementById('btn_submit_pengeluaran');
                 btnSubmit.disabled = true;
-
                 const rawDate = document.getElementById('tgl_pengeluaran').value;
-                formData = {
-                    action: "insertRow",
-                    tanggal: formatTglLokal(rawDate),
-                    cabang: document.getElementById('cabang_pengeluaran').value,
-                    tipe: "Pengeluaran",
-                    kategori: document.getElementById('kategori_pengeluaran').value,
-                    unit: 0, // Pengeluaran tidak memakai hitungan unit masuk
-                    nominal: parseInt(document.getElementById('nominal_pengeluaran').value),
-                    keterangan: document.getElementById('ket_pengeluaran').value,
-                    tanggal_asli: rawDate
-                };
+                
+                urlParams.append("tanggal", formatTglLokal(rawDate));
+                urlParams.append("cabang", document.getElementById('cabang_pengeluaran').value);
+                urlParams.append("kategori", document.getElementById('kategori_pengeluaran').value);
+                urlParams.append("unit", "0");
+                urlParams.append("nominal", document.getElementById('nominal_pengeluaran').value);
+                urlParams.append("keterangan", document.getElementById('ket_pengeluaran').value);
+                urlParams.append("tanggal_asli", rawDate);
             }
 
-            // Gunakan fetch dengan metode POST mengirim parameter ke App Script
+            // PERBAIKAN UTAMA: Menggunakan metode kirim data form-urlencoded agar lolos CORS Google Script tanpa API Gateway tambahan
             fetch(WEB_APP_URL, {
                 method: "POST",
-                mode: "no-cors", // Mode no-cors agar menghindari issue CORS preflight di browser browser lawas
+                mode: "no-cors",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/x-www-form-urlencoded"
                 },
-                body: JSON.stringify(formData)
+                body: urlParams.toString()
             })
-            .then(res => {
-                // Karena menggunakan mode 'no-cors', browser tidak bisa membaca body response asli, 
-                // namun jika sukses (tidak melempar error catch) berarti data terkirim.
+            .then(() => {
                 showStatus("Data " + tipeForm + " Berhasil Disimpan ke Google Sheets!", "success");
-                
-                // Reset Form bersangkutan
                 if (tipeForm === 'Pemasukan') {
                     document.getElementById('formPemasukan').reset();
                     document.getElementById('nominal_pemasukan_display').value = "Rp 0";
                 } else {
                     document.getElementById('formPengeluaran').reset();
                 }
-                
-                // Kembalikan tanggal ke hari ini
                 const today = new Date().toISOString().split('T')[0];
                 document.getElementById('tgl_pemasukan').value = today;
                 document.getElementById('tgl_pengeluaran').value = today;
-                
                 btnSubmit.disabled = false;
             })
             .catch(error => {
                 console.error("Error:", error);
-                showStatus("Gagal mengirim data. Periksa jaringan atau URL App Script Anda.", "error");
+                showStatus("Gagal mengirim data. Periksa jaringan Anda.", "error");
                 btnSubmit.disabled = false;
             });
         }
