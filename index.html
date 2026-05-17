@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catat Keuangan Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+
+    <div class="max-w-md mx-auto bg-white min-h-screen shadow-lg pb-10">
+        
+        <div class="bg-red-600 text-white p-5 rounded-b-2xl shadow-md">
+            <h1 class="text-xl font-bold">Catat Keuangan Admin</h1>
+            <p class="text-xs text-red-100 mt-1">Fokus Pemantauan Pengeluaran</p>
+            
+            <div class="grid grid-cols-2 gap-4 mt-4 bg-red-700 p-3 rounded-xl">
+                <div>
+                    <span class="text-xs text-red-200 block">Total Pengeluaran</span>
+                    <span id="totalPengeluaran" class="text-lg font-bold">Rp 0</span>
+                </div>
+                <div class="border-l border-red-500 pl-3">
+                    <span class="text-xs text-red-200 block">Total Pemasukan</span>
+                    <span id="totalPemasukan" class="text-lg font-bold text-green-300">Rp 0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-4">
+            <form id="formKeuangan" class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                <h2 class="text-sm font-semibold text-gray-700 mb-3 border-b pb-2">Input Data Baru</h2>
+                
+                <div class="mb-3">
+                    <label class="text-xs text-gray-500 block mb-1">Jenis Transaksi</label>
+                    <select id="tipe" class="w-full border p-2.5 rounded-lg text-sm bg-white font-medium text-red-600">
+                        <option value="Pengeluaran">Pengeluaran (Utama)</option>
+                        <option value="Pemasukan">Pemasukan</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="text-xs text-gray-500 block mb-1">Nominal (Rp)</label>
+                    <input type="number" id="nominal" placeholder="Contoh: 50000" class="w-full border p-2.5 rounded-lg text-sm" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="text-xs text-gray-500 block mb-1">Kategori</label>
+                    <select id="kategori" class="w-full border p-2.5 rounded-lg text-sm bg-white">
+                        <option value="Operasional">Operasional / Bensin</option>
+                        <option value="Perbaikan">Perbaikan / Maintenance</option>
+                        <option value="Gaji">Gaji / Komisi</option>
+                        <option value="Perlengkapan">Perlengkapan / Bahan</option>
+                        <option value="Lain-lain">Lain-lain</option>
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label class="text-xs text-gray-500 block mb-1">Keterangan Detail</label>
+                    <textarea id="keterangan" placeholder="Detail pengeluaran atau nama admin..." class="w-full border p-2.5 rounded-lg text-sm h-16" required></textarea>
+                </div>
+
+                <button type="submit" class="w-full bg-red-600 text-white py-2.5 rounded-lg text-sm font-semibold hover:bg-red-700">
+                    Simpan Catatan
+                </button>
+            </form>
+        </div>
+
+        <div class="px-4">
+            <div class="flex justify-between items-center mb-2">
+                <h3 class="text-sm font-bold text-gray-700">Riwayat Catatan</h3>
+                <button id="btnEkspor" class="text-xs bg-green-600 text-white px-3 py-1 rounded shadow-sm font-medium hidden">
+                    Unduh Excel (.CSV)
+                </button>
+            </div>
+            <div id="daftarTransaksi" class="space-y-2">
+                </div>
+        </div>
+
+    </div>
+
+    <script>
+        let transaksi = JSON.parse(localStorage.getItem('data_keuangan_admin')) || [];
+
+        const form = document.getElementById('formKeuangan');
+        const daftarContainer = document.getElementById('daftarTransaksi');
+        const btnEkspor = document.getElementById('btnEkspor');
+
+        function updateTampilan() {
+            daftarContainer.innerHTML = '';
+            let totalKeluar = 0;
+            let totalMasuk = 0;
+
+            if (transaksi.length === 0) {
+                daftarContainer.innerHTML = '<p class="text-center text-xs text-gray-400 py-6">Belum ada catatan.</p>';
+                btnEkspor.classList.add('hidden');
+            } else {
+                btnEkspor.classList.remove('hidden');
+            }
+
+            transaksi.forEach((item, index) => {
+                if (item.tipe === 'Pengeluaran') totalKeluar += item.nominal;
+                else totalMasuk += item.nominal;
+
+                const div = document.createElement('div');
+                div.className = "bg-gray-50 p-3 rounded-xl border border-gray-100 flex justify-between items-center";
+                div.innerHTML = `
+                    <div class="flex-1 pr-2">
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] px-2 py-0.5 rounded-full font-semibold ${item.tipe === 'Pengeluaran' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}">
+                                ${item.kategori}
+                            </span>
+                            <span class="text-[10px] text-gray-400">${item.tanggal}</span>
+                        </div>
+                        <p class="text-xs text-gray-600 mt-1 font-medium">${item.keterangan}</p>
+                    </div>
+                    <div class="text-right flex items-center gap-3">
+                        <span class="text-sm font-bold ${item.tipe === 'Pengeluaran' ? 'text-red-600' : 'text-green-600'}">
+                            ${item.tipe === 'Pengeluaran' ? '-' : '+'} Rp ${item.nominal.toLocaleString('id-ID')}
+                        </span>
+                        <button onclick="hapusData(${index})" class="text-gray-300 hover:text-red-500 text-sm">✕</button>
+                    </div>
+                `;
+                daftarContainer.appendChild(div);
+            });
+
+            document.getElementById('totalPengeluaran').innerText = 'Rp ' + totalKeluar.toLocaleString('id-ID');
+            document.getElementById('totalPemasukan').innerText = 'Rp ' + totalMasuk.toLocaleString('id-ID');
+            localStorage.setItem('data_keuangan_admin', JSON.stringify(transaksi));
+        }
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const dataBaru = {
+                tanggal: new Date().toLocaleDateString('id-ID', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'}),
+                tipe: document.getElementById('tipe').value,
+                nominal: parseInt(document.getElementById('nominal').value),
+                kategori: document.getElementById('kategori').value,
+                keterangan: document.getElementById('keterangan').value
+            };
+
+            transaksi.unshift(dataBaru);
+            form.reset();
+            updateTampilan();
+        });
+
+        function hapusData(index) {
+            if (confirm('Hapus catatan ini?')) {
+                transaksi.splice(index, 1);
+                updateTampilan();
+            }
+        }
+
+        btnEkspor.addEventListener('click', function() {
+            let csv = "Tanggal,Tipe,Kategori,Nominal,Keterangan\n";
+            transaksi.forEach(item => {
+                csv += `"${item.tanggal}","${item.tipe}","${item.kategori}",${item.nominal},"${item.keterangan}"\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute("download", `Laporan_Keuangan_Admin.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+
+        // Jalankan saat aplikasi pertama dibuka
+        updateTampilan();
+    </script>
+</body>
+</html>
