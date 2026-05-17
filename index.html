@@ -4,19 +4,102 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Input Keuangan - Steam MP 7000</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Desain Dasar Aplikasi */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: screen;
+            padding: 20px;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        h2 {
+            text-align: center;
+            color: #1a1a1a;
+            margin-bottom: 5px;
+            font-size: 24px;
+        }
+        .sub-title {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+        /* Desain Form & Input */
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+        select, input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #fafafa;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s;
+        }
+        select:focus, input:focus, textarea:focus {
+            border-color: #0056b3;
+            background-color: #fff;
+            box-shadow: 0 0 5px rgba(0, 86, 179, 0.2);
+        }
+        /* Desain Tombol */
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+        button:hover {
+            background-color: #004085;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 font-sans min-h-screen flex items-center justify-center p-4">
+<body>
 
-    <div class="bg-white p-6 rounded-2xl shadow-lg w-full max-w-md">
-        <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">Steam MP 7000</h2>
-        <p class="text-sm text-center text-gray-500 mb-6">Pusat Input Data Keuangan Cabang</p>
+    <div class="container">
+        <h2>Steam MP 7000</h2>
+        <div class="sub-title">Pusat Input Keuangan Cabang</div>
 
-        <form id="financeForm" class="space-y-4">
-            
-            <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1">Pilih Cabang</label>
-                <select id="cabang" required class="w-full p-3 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <form id="financeForm">
+            <div class="form-group">
+                <label>Pilih Cabang</label>
+                <select id="cabang" required>
                     <option value="" disabled selected>-- Pilih Cabang --</option>
                     <option value="Grobogan">Grobogan</option>
                     <option value="Palis">Palis</option>
@@ -24,43 +107,36 @@
                 </select>
             </div>
 
-            <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1">Tipe Transaksi</label>
-                <select id="tipe" required class="w-full p-3 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <div class="form-group">
+                <label>Tipe Transaksi</label>
+                <select id="tipe" required>
                     <option value="" disabled selected>-- Pilih Tipe --</option>
                     <option value="Pemasukan">Pemasukan (Uang Masuk / Setoran)</option>
                     <option value="Pengeluaran">Pengeluaran (Beli Sabun, Gaji, dll)</option>
                 </select>
             </div>
 
-            <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1">Kategori / Item</label>
-                <input type="text" id="kategori" placeholder="Contoh: Cuci Motor, Beli Semir, Makan Admin" required 
-                       class="w-full p-3 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <div class="form-group">
+                <label>Kategori / Item</label>
+                <input type="text" id="kategori" placeholder="Contoh: Cuci Motor, Beli Semir" required>
             </div>
 
-            <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1">Jumlah Unit / Banyaknya</label>
-                <input type="number" id="unit" placeholder="Contoh: 1, 5, 10" required min="1"
-                       class="w-full p-3 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <div class="form-group">
+                <label>Jumlah Unit / Banyaknya</label>
+                <input type="number" id="unit" placeholder="Contoh: 1, 5, 10" required min="1">
             </div>
 
-            <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1">Total Nominal (Rupiah)</label>
-                <input type="number" id="nominal" placeholder="Contoh: 50000 (Tanpa Titik)" required min="0"
-                       class="w-full p-3 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <div class="form-group">
+                <label>Total Nominal (Rupiah)</label>
+                <input type="number" id="nominal" placeholder="Contoh: 50000 (Tanpa Titik)" required min="0">
             </div>
 
-            <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1">Keterangan Tambahan (Opsional)</label>
-                <textarea id="keterangan" placeholder="Catatan tambahan jika ada..." rows="2"
-                          class="w-full p-3 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+            <div class="form-group">
+                <label>Keterangan Tambahan (Opsional)</label>
+                <textarea id="keterangan" placeholder="Catatan tambahan jika ada..." rows="2"></textarea>
             </div>
 
-            <button type="submit" id="btnSimpan" 
-                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold p-3 rounded-xl transition duration-300 shadow-md">
-                Simpan Catatan Cabang
-            </button>
+            <button type="submit" id="btnSimpan">Simpan Catatan Cabang</button>
         </form>
     </div>
 
@@ -73,8 +149,6 @@
             
             btn.disabled = true;
             btn.innerText = "Mengirim data ke Sheets...";
-            btn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
-            btn.classList.add('bg-gray-400', 'cursor-not-allowed');
 
             const dataForm = {
                 cabang: document.getElementById('cabang').value,
@@ -104,8 +178,6 @@
             .finally(() => {
                 btn.disabled = false;
                 btn.innerText = "Simpan Catatan Cabang";
-                btn.classList.remove('bg-gray-400', 'cursor-not-allowed');
-                btn.classList.add('bg-blue-600', 'hover:bg-blue-700');
             });
         });
     </script>
