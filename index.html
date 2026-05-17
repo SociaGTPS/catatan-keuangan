@@ -3,289 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catat Keuangan Steam MP 7000</title>
+    <title>Input Keuangan - Steam MP 7000</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 font-sans">
+<body class="bg-gray-100 font-sans min-h-screen flex items-center justify-center p-4">
 
-    <div class="max-w-md mx-auto bg-white min-h-screen shadow-lg pb-10">
-        
-        <div class="bg-red-600 text-white p-5 rounded-b-2xl shadow-md">
-            <h1 class="text-xl font-bold tracking-wide">Steam MP 7000</h1>
-            <p class="text-xs text-red-100 mt-1">Sistem Pencatatan Multi-Cabang & Pendapatan Owner</p>
+    <div class="bg-white p-6 rounded-2xl shadow-lg w-full max-w-md">
+        <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">Steam MP 7000</h2>
+        <p class="text-sm text-center text-gray-500 mb-6">Pusat Input Data Keuangan Cabang</p>
+
+        <form id="financeForm" class="space-y-4">
             
-            <div class="mt-3">
-                <label class="text-[10px] text-red-200 block font-semibold mb-1">PILIH CABANG UNTUK MELIHAT REKAP:</label>
-                <select id="filterCabang" class="w-full bg-red-700 text-white border border-red-500 rounded-lg p-2 text-xs font-bold focus:outline-none" onchange="updateTampilan()">
-                    <option value="Semua">Semua Cabang (Gabungan)</option>
-                    <option value="Cabang Grobogan">Cabang Grobogan</option>
-                    <option value="Cabang Palis">Cabang Palis</option>
-                    <option value="Cabang Cayur">Cabang Cayur</option>
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Pilih Cabang</label>
+                <select id="cabang" required class="w-full p-3 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="" disabled selected>-- Pilih Cabang --</option>
+                    <option value="Grobogan">Grobogan</option>
+                    <option value="Palis">Palis</option>
+                    <option value="Kresek">Kresek</option>
                 </select>
             </div>
 
-            <div class="grid grid-cols-2 gap-3 mt-4 text-center">
-                <div class="bg-red-700 p-2.5 rounded-xl">
-                    <span class="text-[9px] text-red-200 block uppercase font-bold">Kotor Owner (4k/Motor)</span>
-                    <span id="totalPemasukan" class="text-sm font-bold text-green-300">Rp 0</span>
-                </div>
-                <div class="bg-red-700 p-2.5 rounded-xl">
-                    <span class="text-[9px] text-red-200 block uppercase font-bold">Total Pengeluaran</span>
-                    <span id="totalPengeluaran" class="text-sm font-bold text-white">Rp 0</span>
-                </div>
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Tipe Transaksi</label>
+                <select id="tipe" required class="w-full p-3 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="" disabled selected>-- Pilih Tipe --</option>
+                    <option value="Pemasukan">Pemasukan (Uang Masuk / Setoran)</option>
+                    <option value="Pengeluaran">Pengeluaran (Beli Sabun, Gaji, dll)</option>
+                </select>
             </div>
-            
-            <div class="mt-3 bg-zinc-900 p-3 rounded-xl text-center border border-yellow-500/30 shadow-inner">
-                <span class="text-[10px] text-yellow-400 block uppercase font-extrabold tracking-wider">Estimasi Hasil Bersih Owner</span>
-                <span id="hasilBersih" class="text-lg font-black text-yellow-400">Rp 0</span>
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Kategori / Item</label>
+                <input type="text" id="kategori" placeholder="Contoh: Cuci Motor, Beli Semir, Makan Admin" required 
+                       class="w-full p-3 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
-        </div>
 
-        <div class="p-4">
-            <form id="formKeuangan" class="bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-sm">
-                <h2 class="text-xs font-bold text-gray-700 mb-3 border-b pb-2 uppercase tracking-wider text-center">Input Data Operasional</h2>
-                
-                <div class="mb-3">
-                    <label class="text-xs text-gray-500 block mb-1 font-medium">Cabang Tempat Transaksi *</label>
-                    <select id="cabang" class="w-full border p-2.5 rounded-lg text-sm bg-white font-semibold" required>
-                        <option value="Cabang Grobogan">Cabang Grobogan</option>
-                        <option value="Cabang Palis">Cabang Palis</option>
-                        <option value="Cabang Cayur">Cabang Cayur</option>
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label class="text-xs text-gray-500 block mb-1 font-medium">Jenis Catatan *</label>
-                    <select id="tipe" class="w-full border p-2.5 rounded-lg text-sm bg-white font-bold text-red-600" onchange="aturFormTipe()">
-                        <option value="Pengeluaran">Pengeluaran Cabang (Utama)</option>
-                        <option value="Pemasukan">Pemasukan (Hitung Unit Motor)</option>
-                    </select>
-                </div>
-
-                <div id="wrapperPemasukan" class="hidden bg-green-50 p-3 rounded-lg border border-green-200 mb-3">
-                    <label class="text-xs text-green-700 block mb-1 font-bold">Jumlah Unit Motor Ter-cuci *</label>
-                    <div class="flex gap-2 items-center">
-                        <input type="number" id="jumlahUnit" placeholder="Contoh: 25" class="w-1/2 border p-2 rounded-lg text-sm focus:outline-green-500">
-                        <span class="text-xs text-gray-500 font-medium">x Rp 4.000 / unit</span>
-                    </div>
-                    <p class="text-[10px] text-green-600 mt-1">* Sistem akan otomatis menghitung pendapatan kotor Owner</p>
-                </div>
-
-                <div id="wrapperNominal" class="mb-3">
-                    <label class="text-xs text-gray-500 block mb-1 font-medium">Nominal Pengeluaran (Rp) *</label>
-                    <input type="number" id="nominal" placeholder="Contoh: 50000" class="w-full border p-2.5 rounded-lg text-sm focus:outline-red-500">
-                </div>
-
-                <div id="wrapperKategori" class="mb-3">
-                    <label class="text-xs text-gray-500 block mb-1 font-medium">Kategori Kebutuhan *</label>
-                    <select id="kategori" class="w-full border p-2.5 rounded-lg text-sm bg-white">
-                        <option value="Sabun / Shampo">Bahan (Sabun, Shampo, Semir)</option>
-                        <option value="Listrik Token">Listrik / Token</option>
-                        <option value="Sewa Ruko">Sewa Ruko</option>
-                        <option value="Perawatan Mesin">Perawatan Mesin / Sparepart</option>
-                        <option value="Beras Karyawan">Beras Karyawan</option>
-                        <option value="Kopi Karyawan">Kopi / Gula Karyawan</option>
-                        <option value="WiFi">WiFi Bulanan</option>
-                        <option value="Gaji / Komisi">Gaji / Komisi / Bon</option>
-                        <option value="Lain-lain">Lain-lain / Keperluan Mendadak</option>
-                    </select>
-                </div>
-
-                <div class="mb-4">
-                    <label class="text-xs text-gray-500 block mb-1 font-medium">Keterangan Tambahan / Detail *</label>
-                    <textarea id="keterangan" placeholder="Contoh: Beli sabun salju merk X atau Cuci harian admin" class="w-full border p-2.5 rounded-lg text-sm h-16" required></textarea>
-                </div>
-
-                <button id="btnSimpan" type="submit" class="w-full bg-gray-900 text-white py-2.5 rounded-lg text-sm font-semibold hover:bg-gray-800 transition-colors shadow">
-                    Simpan Catatan Cabang
-                </button>
-            </form>
-        </div>
-
-        <div class="px-4">
-            <div class="flex justify-between items-center mb-2">
-                <h3 class="text-sm font-bold text-gray-700">Riwayat Catatan Hari Ini</h3>
-                <button id="btnEkspor" class="text-xs bg-green-600 text-white px-3 py-1 rounded shadow-sm font-medium hidden">
-                    Unduh Excel (.CSV)
-                </button>
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Jumlah Unit / Banyaknya</label>
+                <input type="number" id="unit" placeholder="Contoh: 1, 5, 10" required min="1"
+                       class="w-full p-3 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
-            <div id="daftarTransaksi" class="space-y-2">
-                </div>
-        </div>
 
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Total Nominal (Rupiah)</label>
+                <input type="number" id="nominal" placeholder="Contoh: 50000 (Tanpa Titik)" required min="0"
+                       class="w-full p-3 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Keterangan Tambahan (Opsional)</label>
+                <textarea id="keterangan" placeholder="Catatan tambahan jika ada..." rows="2"
+                          class="w-full p-3 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+            </div>
+
+            <button type="submit" id="btnSimpan" 
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold p-3 rounded-xl transition duration-300 shadow-md">
+                Simpan Catatan Cabang
+            </button>
+        </form>
     </div>
 
     <script>
-        // Link Aplikasi Web Google Sheets milik Owner Steam MP 7000
-        const URL_GOOGLE_SHEETS = "https://script.google.com/macros/s/AKfycbxEh-M2SPvBPFvOo41PQQxsj5A3jfUNCa5RjXiIAhZaYIAos-lpXpJEPcDcNQ-Fy2Y/exec";
+        const urlAppsScript = "https://script.google.com/macros/s/AKfycbxEh-M2SPvBPFvOo41PQQxsj5A3jfUNCa5RjXiIAhZaYIAos-lpXpJEPcDcNQ-Fy2Y/exec";
 
-        let transaksi = JSON.parse(localStorage.getItem('data_keuangan_mp7000')) || [];
-
-        const form = document.getElementById('formKeuangan');
-        const daftarContainer = document.getElementById('daftarTransaksi');
-        const btnEkspor = document.getElementById('btnEkspor');
-        const btnSimpan = document.getElementById('btnSimpan');
-
-        function aturFormTipe() {
-            const tipe = document.getElementById('tipe').value;
-            if (tipe === 'Pemasukan') {
-                document.getElementById('wrapperPemasukan').classList.remove('hidden');
-                document.getElementById('wrapperNominal').classList.add('hidden');
-                document.getElementById('wrapperKategori').classList.add('hidden');
-                document.getElementById('jumlahUnit').setAttribute('required', 'true');
-                document.getElementById('nominal').removeAttribute('required');
-            } else {
-                document.getElementById('wrapperPemasukan').classList.add('hidden');
-                document.getElementById('wrapperNominal').classList.remove('hidden');
-                document.getElementById('wrapperKategori').classList.remove('hidden');
-                document.getElementById('nominal').setAttribute('required', 'true');
-                document.getElementById('jumlahUnit').removeAttribute('required');
-            }
-        }
-
-        function updateTampilan() {
-            daftarContainer.innerHTML = '';
-            let totalKeluar = 0;
-            let totalMasuk = 0;
-            const filter = document.getElementById('filterCabang').value;
-
-            const dataTerfilter = transaksi.filter(item => filter === 'Semua' || item.cabang === filter);
-
-            if (dataTerfilter.length === 0) {
-                daftarContainer.innerHTML = '<p class="text-center text-xs text-gray-400 py-6">Belum ada catatan untuk cabang ini.</p>';
-                btnEkspor.classList.add('hidden');
-            } else {
-                btnEkspor.classList.remove('hidden');
-            }
-
-            dataTerfilter.forEach((item, index) => {
-                if (item.tipe === 'Pengeluaran') totalKeluar += item.nominal;
-                else totalMasuk += item.nominal;
-
-                const div = document.createElement('div');
-                div.className = "bg-gray-50 p-3 rounded-xl border border-gray-100 flex justify-between items-center shadow-xs";
-                div.innerHTML = `
-                    <div class="flex-1 pr-2">
-                        <div class="flex items-center gap-1.5 flex-wrap">
-                            <span class="text-[9px] bg-gray-800 text-white px-1.5 py-0.5 rounded font-bold">${item.cabang}</span>
-                            <span class="text-[9px] px-1.5 py-0.5 rounded font-semibold ${item.tipe === 'Pengeluaran' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}">
-                                ${item.kategori}
-                            </span>
-                            <span class="text-[9px] text-gray-400">${item.tanggal}</span>
-                        </div>
-                        <p class="text-xs text-gray-600 mt-1 font-medium">${item.keterangan} ${item.unit ? `(${item.unit} Motor)` : ''}</p>
-                    </div>
-                    <div class="text-right flex items-center gap-3">
-                        <span class="text-xs font-bold ${item.tipe === 'Pengeluaran' ? 'text-red-600' : 'text-green-600'}">
-                            ${item.tipe === 'Pengeluaran' ? '-' : '+'} Rp ${item.nominal.toLocaleString('id-ID')}
-                        </span>
-                        <button onclick="hapusData('${item.id}')" class="text-gray-300 hover:text-red-500 text-xs">✕</button>
-                    </div>
-                `;
-                daftarContainer.appendChild(div);
-            });
-
-            // Hitung hasil bersih owner
-            let totalBersih = totalMasuk - totalKeluar;
-
-            document.getElementById('totalPengeluaran').innerText = 'Rp ' + totalKeluar.toLocaleString('id-ID');
-            document.getElementById('totalPemasukan').innerText = 'Rp ' + totalMasuk.toLocaleString('id-ID');
-            
-            const elementBersih = document.getElementById('hasilBersih');
-            elementBersih.innerText = 'Rp ' + totalBersih.toLocaleString('id-ID');
-            
-            // Beri warna merah jika minus, hijau jika untung besar
-            if (totalBersih < 0) {
-                elementBersih.className = "text-lg font-black text-red-400";
-            } else {
-                elementBersih.className = "text-lg font-black text-yellow-400";
-            }
-        }
-
-        form.addEventListener('submit', function(e) {
+        document.getElementById('financeForm').addEventListener('submit', function(e) {
             e.preventDefault();
+            const btn = document.getElementById('btnSimpan');
             
-            btnSimpan.innerText = "Mengirim data...";
-            btnSimpan.disabled = true;
+            btn.disabled = true;
+            btn.innerText = "Mengirim data ke Sheets...";
+            btn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+            btn.classList.add('bg-gray-400', 'cursor-not-allowed');
 
-            const tipe = document.getElementById('tipe').value;
-            let kalkulasiNominal = 0;
-            let unitMasuk = null;
-            let kategoriFix = document.getElementById('kategori').value;
-
-            if (tipe === 'Pemasukan') {
-                unitMasuk = parseInt(document.getElementById('jumlahUnit').value);
-                kalkulasiNominal = unitMasuk * 4000; 
-                kategoriFix = "Setoran Unit Motor";
-            } else {
-                kalkulasiNominal = parseInt(document.getElementById('nominal').value);
-            }
-
-            const dataBaru = {
-                id: 'trx_' + Date.now(),
+            const dataForm = {
                 cabang: document.getElementById('cabang').value,
-                tanggal: new Date().toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit'}),
-                tipe: tipe,
-                nominal: kalkulasiNominal,
-                unit: unitMasuk,
-                kategori: kategoriFix,
+                tipe: document.getElementById('tipe').value,
+                kategori: document.getElementById('kategori').value,
+                unit: document.getElementById('unit').value,
+                nominal: document.getElementById('nominal').value,
                 keterangan: document.getElementById('keterangan').value
             };
 
-            // Kirim data langsung ke Google Sheets Pusat secara Real-time
-            fetch(URL_GOOGLE_SHEETS, {
+            fetch(urlAppsScript, {
                 method: 'POST',
                 mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(dataBaru)
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dataForm)
             })
             .then(() => {
-                transaksi.unshift(dataBaru);
-                localStorage.setItem('data_keuangan_mp7000', JSON.stringify(transaksi));
-                alert("Data berhasil terkirim ke Google Sheets pusat!");
-                
-                form.reset();
-                document.getElementById('jumlahUnit').value = '';
-                document.getElementById('nominal').value = '';
-                aturFormTipe();
-                updateTampilan();
+                alert(`Data berhasil disimpan ke Google Sheets untuk Cabang ${dataForm.cabang}!`);
+                document.getElementById('financeForm').reset();
             })
-            .catch(err => {
-                alert("Gagal kirim ke Google Sheets, tapi data tersimpan sementara di HP.");
-                transaksi.unshift(dataBaru);
-                localStorage.setItem('data_keuangan_mp7000', JSON.stringify(transaksi));
-                updateTampilan();
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Waduh, koneksi gagal atau ada gangguan sistem!');
             })
             .finally(() => {
-                btnSimpan.innerText = "Simpan Catatan Cabang";
-                btnSimpan.disabled = false;
+                btn.disabled = false;
+                btn.innerText = "Simpan Catatan Cabang";
+                btn.classList.remove('bg-gray-400', 'cursor-not-allowed');
+                btn.classList.add('bg-blue-600', 'hover:bg-blue-700');
             });
         });
-
-        function hapusData(id) {
-            if (confirm('Hapus catatan ini dari HP? (Catatan di Google Sheets pusat tidak akan terhapus)')) {
-                transaksi = transaksi.filter(item => item.id !== id);
-                localStorage.setItem('data_keuangan_mp7000', JSON.stringify(transaksi));
-                updateTampilan();
-            }
-        }
-
-        btnEkspor.addEventListener('click', function() {
-            let csv = "ID,Cabang,Tanggal,Tipe,Kategori,Unit Motor,Nominal,Keterangan\n";
-            transaksi.forEach(item => {
-                csv += `"${item.id}","${item.cabang}","${item.tanggal}","${item.tipe}","${item.kategori}","${item.unit || 0}",${item.nominal},"${item.keterangan}"\n`;
-            });
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.setAttribute("download", `Laporan_Steam_MP7000_${document.getElementById('filterCabang').value}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        });
-
-        aturFormTipe();
-        updateTampilan();
     </script>
 </body>
 </html>
