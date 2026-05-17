@@ -3,172 +3,546 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Keuangan - Steam MP 7000</title>
+    <title>Sistem Keuangan Steam MP 7000</title>
     <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #d32f2f 0%, #9a0007 100%);
+            --secondary-gradient: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+            --accent-color: #d32f2f;
+            --dark-color: #212121;
+            --light-color: #f8f9fa;
+            --success-color: #2e7d32;
+            --border-color: #e0e0e0;
+            --shadow: 0 4px 6px rgba(0,0,0,0.07);
+            --radius: 12px;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+
         body {
-            background-color: #eef2f3;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 15px;
+            background-color: #f4f6f9;
+            color: var(--dark-color);
+            line-height: 1.6;
+            padding-bottom: 60px;
         }
-        .container {
-            background: #ffffff;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 380px;
-        }
-        h2 {
-            text-align: center;
-            color: #1e3c72;
-            margin-bottom: 5px;
-            font-size: 22px;
-        }
-        .sub {
-            text-align: center;
-            color: #666;
-            font-size: 13px;
-            margin-bottom: 20px;
-        }
-        .form-group {
-            margin-bottom: 14px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 13px;
-            font-weight: bold;
-            color: #333;
-        }
-        select, input, textarea {
-            width: 100%;
-            padding: 11px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 14px;
-            background-color: #fafafa;
-        }
-        select:focus, input:focus, textarea:focus {
-            border-color: #1e3c72;
-            outline: none;
-            background-color: #fff;
-        }
-        button {
-            width: 100%;
-            padding: 13px;
-            background: #1e3c72;
+
+        /* Header / Navbar Styling */
+        header {
+            background: var(--primary-gradient);
             color: white;
+            padding: 20px 16px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-bottom: 4px solid #ffffff;
+        }
+
+        header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        header p {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            background: white;
+            border-radius: var(--radius);
+            padding: 6px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .tab-btn {
+            flex: 1;
+            background: none;
             border: none;
+            padding: 12px 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #757575;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .tab-btn.active {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 4px 10px rgba(211, 47, 47, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Card Component */
+        .card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .card h2 {
+            font-size: 18px;
+            color: #b71c1c;
+            margin-bottom: 20px;
+            border-left: 4px solid #d32f2f;
+            padding-left: 10px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #424242;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
             border-radius: 8px;
             font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
+            background-color: #fafafa;
+            transition: border-color 0.3s, background-color 0.3s;
         }
-        button:disabled {
-            background-color: #ccc;
+
+        .form-control:focus {
+            outline: none;
+            border-color: #d32f2f;
+            background-color: #fff;
+        }
+
+        /* Info Alert Box */
+        .info-box {
+            background: #ffebee;
+            border-left: 4px solid #d32f2f;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 13px;
+            color: #c62828;
+            font-weight: 500;
+        }
+
+        /* Button Customization */
+        .btn-submit {
+            width: 100%;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(211, 47, 47, 0.2);
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-submit:hover {
+            opacity: 0.95;
+            transform: translateY(-1px);
+        }
+
+        .btn-submit:disabled {
+            background: #bdbdbd;
             cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Live Calc Summary Card */
+        .live-calc {
+            background: var(--secondary-gradient);
+            border: 1px dashed #d32f2f;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .live-calc p {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .live-calc p.total {
+            border-top: 1px solid var(--border-color);
+            padding-top: 6px;
+            font-weight: bold;
+            color: var(--success-color);
+            font-size: 16px;
+        }
+
+        /* Status Toast Message */
+        #statusMessage {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 24px;
+            border-radius: 30px;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: none;
+            text-align: center;
+            max-width: 90%;
+        }
+
+        .status-success { background-color: #2e7d32; }
+        .status-error { background-color: #c62828; }
+        .status-loading { background-color: #0288d1; }
+
+        /* Embedded Table Styling for Live View */
+        .table-responsive {
+            overflow-x: auto;
+            margin-top: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            background: white;
+        }
+
+        th {
+            background: var(--primary-gradient);
+            color: white;
+            font-weight: 600;
+            text-align: left;
+            padding: 12px;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* Footer Accent */
+        .footer-logo {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 12px;
+            color: #9e9e9e;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
     </style>
 </head>
 <body>
 
+    <header>
+        <h1>STEAM MP 7000</h1>
+        <p>Sistem Input Keuangan & Manajemen 3 Cabang Utama</p>
+    </header>
+
     <div class="container">
-        <h2>Steam MP 7000</h2>
-        <div class="sub">Input Keuangan Cabang</div>
+        <!-- Tab Navigation Menu -->
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchTab('input-pemasukan')">Pemasukan</button>
+            <button class="tab-btn" onclick="switchTab('input-pengeluaran')">Pengeluaran</button>
+            <button class="tab-btn" onclick="switchTab('monitoring')">Akses GSheet</button>
+        </div>
 
-        <form id="financeForm">
-            <div class="form-group">
-                <label>Pilih Cabang</label>
-                <select id="cabang" required>
-                    <option value="" disabled selected>-- Pilih Cabang --</option>
-                    <option value="Grobogan">Grobogan</option>
-                    <option value="Palis">Palis</option>
-                    <option value="Kresek">Kresek</option>
-                </select>
+        <!-- TAB 1: INPUT PEMASUKAN -->
+        <div id="input-pemasukan" class="tab-content active">
+            <div class="card">
+                <h2>Form Input Pemasukan Harian</h2>
+                
+                <form id="formPemasukan" onsubmit="submitData(event, 'Pemasukan')">
+                    <div class="form-group">
+                        <label>Tanggal Transaksi</label>
+                        <input type="date" id="tgl_pemasukan" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Cabang Operasional</label>
+                        <select id="cabang_pemasukan" class="form-control" required>
+                            <option value="" disabled selected>-- Pilih Cabang --</option>
+                            <option value="Cabang Grobogan">Cabang Grobogan</option>
+                            <option value="Cabang Palis">Cabang Palis</option>
+                            <option value="Cabang Cayur">Cabang Cayur</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Jumlah Unit Terjual (Motor/Mobil)</label>
+                        <input type="number" id="unit_pemasukan" class="form-control" placeholder="Contoh: 25" min="1" required oninput="hitungKotor()">
+                    </div>
+
+                    <div class="info-box">
+                        💡 Ketentuan Tarif: Pemasukan per Unit dihitung otomatis senilai <b>Rp 4.000</b> (Kotor Owner).
+                    </div>
+
+                    <div class="form-group">
+                        <label>Total Nominal Terhitung (Rp)</label>
+                        <input type="text" id="nominal_pemasukan_display" class="form-control" readonly style="font-weight: bold; color: var(--success-color); background-color: #edf7ed;" value="Rp 0">
+                        <input type="hidden" id="nominal_pemasukan">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Keterangan Tambahan (Opsional)</label>
+                        <textarea id="ket_pemasukan" class="form-control" rows="2" placeholder="Contoh: Ramai lancar, cuaca mendung sore hari..."></textarea>
+                    </div>
+
+                    <button type="submit" id="btn_submit_pemasukan" class="btn-submit">Simpan Data Pemasukan</button>
+                </form>
             </div>
+        </div>
 
-            <div class="form-group">
-                <label>Tipe Transaksi</label>
-                <select id="tipe" required>
-                    <option value="" disabled selected>-- Pilih Tipe --</option>
-                    <option value="Pemasukan">Pemasukan (Uang Masuk)</option>
-                    <option value="Pengeluaran">Pengeluaran (Uang Keluar)</option>
-                </select>
+        <!-- TAB 2: INPUT PENGELUARAN -->
+        <div id="input-pengeluaran" class="tab-content">
+            <div class="card">
+                <h2>Form Input Pengeluaran Operasional</h2>
+                
+                <form id="formPengeluaran" onsubmit="submitData(event, 'Pengeluaran')">
+                    <div class="form-group">
+                        <label>Tanggal Transaksi</label>
+                        <input type="date" id="tgl_pengeluaran" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Cabang Terkait</label>
+                        <select id="cabang_pengeluaran" class="form-control" required>
+                            <option value="" disabled selected>-- Pilih Cabang --</option>
+                            <option value="Cabang Grobogan">Cabang Grobogan</option>
+                            <option value="Cabang Palis">Cabang Palis</option>
+                            <option value="Cabang Cayur">Cabang Cayur</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Kategori Pengeluaran</label>
+                        <select id="kategori_pengeluaran" class="form-control" required>
+                            <option value="" disabled selected>-- Pilih Kategori --</option>
+                            <option value="Beras Karyawan">Beras Karyawan</option>
+                            <option value="Kopi Karyawan">Kopi Karyawan</option>
+                            <option value="Listrik Token">Listrik Token</option>
+                            <option value="Sewa Ruko">Sewa Ruko</option>
+                            <option value="Sabun / Sampo Steam">Sabun / Sampo Steam</option>
+                            <option value="Perawatan Mesin">Perawatan Mesin</option>
+                            <option value="Lain-lain">Lain-lain / Operasional Non-Rutin</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nominal Pengeluaran (Rp)</label>
+                        <input type="number" id="nominal_pengeluaran" class="form-control" placeholder="Contoh: 150000" min="1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Detail Keterangan</label>
+                        <textarea id="ket_pengeluaran" class="form-control" rows="2" placeholder="Contoh: Pembelian beras 10kg untuk mes karyawan" required></textarea>
+                    </div>
+
+                    <button type="submit" id="btn_submit_pengeluaran" class="btn-submit">Simpan Data Pengeluaran</button>
+                </form>
             </div>
+        </div>
 
-            <div class="form-group">
-                <label>Kategori / Item</label>
-                <input type="text" id="kategori" placeholder="Contoh: Cuci Motor, Beli Sabun" required>
+        <!-- TAB 3: LIVE REKAP & MONITORING -->
+        <div id="monitoring" class="tab-content">
+            <div class="card">
+                <h2>Akses Cepat Google Spreadsheet</h2>
+                <div class="info-box" style="background-color: #e3f2fd; color: #0d47a1; border-left-color: #2196f3;">
+                    ℹ️ Seluruh input data di atas akan otomatis diproses, divalidasi, dan dihitung secara realtime ke dalam tabel <b>Laporan Bersih</b> dan log transaksi <b>Sheet1</b> pada Google Sheets Anda.
+                </div>
+                <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 12px;">
+                    <a href="https://script.google.com/macros/s/AKfycbxEh-M2SPvBPFvOo41PQQxsj5A3jfUNCa5RjXiIAhZaYIAos-lpXpJEPcDcNQ-Fy2Y/exec" target="_blank" class="btn-submit" style="text-align: center; text-decoration: none; background: #2e7d32;">
+                        🟢 Buka Aplikasi Web (Web App Exec)
+                    </a>
+                    <a href="https://docs.google.com/spreadsheets/d/1SnDRFwt9fumyYriEMS07gK4ext-EdMTL_jPZoUGSyz1Tl7QBuZLGO-Oa/edit" target="_blank" class="btn-submit" style="text-align: center; text-decoration: none; background: #424242;">
+                        📊 Buka Spreadsheet Utama (Laporan & Sheet1)
+                    </a>
+                </div>
             </div>
+        </div>
 
-            <div class="form-group">
-                <label>Jumlah Unit</label>
-                <input type="number" id="unit" placeholder="Contoh: 1" required min="1">
-            </div>
-
-            <div class="form-group">
-                <label>Total Nominal (Rp)</label>
-                <input type="number" id="nominal" placeholder="Contoh: 50000" required min="0">
-            </div>
-
-            <div class="form-group">
-                <label>Keterangan (Opsional)</label>
-                <textarea id="keterangan" placeholder="Catatan tambahan jika ada..." rows="2"></textarea>
-            </div>
-
-            <button type="submit" id="btnSimpan">SIMPAN DATA</button>
-        </form>
+        <div class="footer-logo">
+            Steam MP 7000 • Profesional & Akurat
+        </div>
     </div>
 
+    <!-- Toast Notification Box -->
+    <div id="statusMessage"></div>
+
     <script>
-        const urlAppsScript = "https://script.google.com/macros/s/AKfycbxEh-M2SPvBPFvOo41PQQxsj5A3jfUNCa5RjXiIAhZaYIAos-lpXpJEPcDcNQ-Fy2Y/exec";
+        // MASUKKAN URL GOOGLE APP SCRIPT WEB APP SENDER DI SINI
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxEh-M2SPvBPFvOo41PQQxsj5A3jfUNCa5RjXiIAhZaYIAos-lpXpJEPcDcNQ-Fy2Y/exec";
 
-        document.getElementById('financeForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const btn = document.getElementById('btnSimpan');
+        // Set default date ke hari ini saat web dibuka
+        window.onload = function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('tgl_pemasukan').value = today;
+            document.getElementById('tgl_pengeluaran').value = today;
+        };
+
+        // Fungsi Ganti Tab Menu
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             
-            btn.disabled = true;
-            btn.innerText = "Mengirim...";
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
 
-            // Menggunakan URLSearchParams agar data dipaksa masuk ke Google Apps Script tanpa hambatan
-            const dataData = new URLSearchParams();
-            dataData.append('cabang', document.getElementById('cabang').value);
-            dataData.append('tipe', document.getElementById('tipe').value);
-            dataData.append('kategori', document.getElementById('kategori').value);
-            dataData.append('unit', document.getElementById('unit').value);
-            dataData.append('nominal', document.getElementById('nominal').value);
-            dataData.append('keterangan', document.getElementById('keterangan').value);
+        // Hitung Otomatis Kotor Owner Berdasarkan Jumlah Unit (1 Unit = 4000)
+        function hitungKotor() {
+            const unitInput = document.getElementById('unit_pemasukan').value;
+            const tarifPerUnit = 4000;
+            const totalNominal = unitInput ? parseInt(unitInput) * tarifPerUnit : 0;
+            
+            document.getElementById('nominal_pemasukan').value = totalNominal;
+            document.getElementById('nominal_pemasukan_display').value = "Rp " + totalNominal.toLocaleString('id-ID');
+        }
 
-            fetch(urlAppsScript, {
-                method: 'POST',
-                body: dataData,
+        // Tampilkan Pesan Status (Toast)
+        function showStatus(text, type) {
+            const msgBox = document.getElementById('statusMessage');
+            msgBox.innerText = text;
+            msgBox.className = ''; // reset class
+            
+            if(type === 'success') msgBox.classList.add('status-success');
+            else if(type === 'error') msgBox.classList.add('status-error');
+            else if(type === 'loading') msgBox.classList.add('status-loading');
+            
+            msgBox.style.display = 'block';
+            
+            if(type !== 'loading') {
+                setTimeout(() => {
+                    msgBox.style.display = 'none';
+                }, 4000);
+            }
+        }
+
+        // Kirim Data Form Ke Google Apps Script Web App
+        function submitData(event, tipeForm) {
+            event.preventDefault();
+            
+            let btnSubmit, formData = {};
+            const formatTglLokal = (tglStr) => {
+                if(!tglStr) return "";
+                const d = new Date(tglStr);
+                return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth()+1).padStart(2, '0')}/${d.getFullYear()}`;
+            };
+
+            showStatus("Sedang mengirim data ke Google Sheets...", "loading");
+
+            if (tipeForm === 'Pemasukan') {
+                btnSubmit = document.getElementById('btn_submit_pemasukan');
+                btnSubmit.disabled = true;
+
+                const rawDate = document.getElementById('tgl_pemasukan').value;
+                formData = {
+                    action: "insertRow",
+                    tanggal: formatTglLokal(rawDate),
+                    cabang: document.getElementById('cabang_pemasukan').value,
+                    tipe: "Pemasukan",
+                    kategori: "Pemasukan Unit",
+                    unit: parseInt(document.getElementById('unit_pemasukan').value),
+                    nominal: parseInt(document.getElementById('nominal_pemasukan').value),
+                    keterangan: document.getElementById('ket_pemasukan').value || "Pemasukan rutin",
+                    tanggal_asli: rawDate
+                };
+            } else {
+                btnSubmit = document.getElementById('btn_submit_pengeluaran');
+                btnSubmit.disabled = true;
+
+                const rawDate = document.getElementById('tgl_pengeluaran').value;
+                formData = {
+                    action: "insertRow",
+                    tanggal: formatTglLokal(rawDate),
+                    cabang: document.getElementById('cabang_pengeluaran').value,
+                    tipe: "Pengeluaran",
+                    kategori: document.getElementById('kategori_pengeluaran').value,
+                    unit: 0, // Pengeluaran tidak memakai hitungan unit masuk
+                    nominal: parseInt(document.getElementById('nominal_pengeluaran').value),
+                    keterangan: document.getElementById('ket_pengeluaran').value,
+                    tanggal_asli: rawDate
+                };
+            }
+
+            // Gunakan fetch dengan metode POST mengirim parameter ke App Script
+            fetch(WEB_APP_URL, {
+                method: "POST",
+                mode: "no-cors", // Mode no-cors agar menghindari issue CORS preflight di browser browser lawas
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(res => {
+                // Karena menggunakan mode 'no-cors', browser tidak bisa membaca body response asli, 
+                // namun jika sukses (tidak melempar error catch) berarti data terkirim.
+                showStatus("Data " + tipeForm + " Berhasil Disimpan ke Google Sheets!", "success");
+                
+                // Reset Form bersangkutan
+                if (tipeForm === 'Pemasukan') {
+                    document.getElementById('formPemasukan').reset();
+                    document.getElementById('nominal_pemasukan_display').value = "Rp 0";
+                } else {
+                    document.getElementById('formPengeluaran').reset();
                 }
+                
+                // Kembalikan tanggal ke hari ini
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('tgl_pemasukan').value = today;
+                document.getElementById('tgl_pengeluaran').value = today;
+                
+                btnSubmit.disabled = false;
             })
-            .then(() => {
-                alert("Mantap! Data Berhasil Disimpan.");
-                document.getElementById('financeForm').reset();
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                alert("Waduh, Gagal mengirim data!");
-            })
-            .finally(() => {
-                btn.disabled = false;
-                btn.innerText = "SIMPAN DATA";
+            .catch(error => {
+                console.error("Error:", error);
+                showStatus("Gagal mengirim data. Periksa jaringan atau URL App Script Anda.", "error");
+                btnSubmit.disabled = false;
             });
-        });
+        }
     </script>
 </body>
 </html>
