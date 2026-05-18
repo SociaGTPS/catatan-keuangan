@@ -3,147 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Manajemen Toko</title>
+    <title>Sistem Keuangan Steam MP 7000</title>
     <style>
         :root {
-            --bg-color: #0d0d0d;
-            --card-bg: #141414;
-            --accent-color: #ff3333;
-            --text-color: #ffffff;
-            --text-muted: #888888;
-            --success-color: #00ff66;
-            --warning-color: #ffcc00;
+            --primary-gradient: linear-gradient(135deg, #d32f2f 0%, #9a0007 100%);
+            --secondary-gradient: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+            --accent-color: #d32f2f;
+            --dark-color: #212121;
+            --light-color: #f8f9fa;
+            --success-color: #2e7d32;
+            --border-color: #e0e0e0;
+            --shadow: 0 4px 6px rgba(0,0,0,0.07);
+            --radius: 12px;
         }
 
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            background-color: #f4f6f9;
+            color: var(--dark-color);
+            line-height: 1.6;
+            padding-bottom: 60px;
+        }
+
+        /* STYLING GERBANG LOGIN & DAFTAR */
+        #gerbangAuth {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #f4f6f9;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 9999; padding: 20px;
+        }
+        .auth-card {
+            background: white; width: 100%; max-width: 400px;
+            padding: 30px; border-radius: var(--radius);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-top: 5px solid #d32f2f;
+        }
+        .auth-card h2 {
+            text-align: center; color: #b71c1c; margin-bottom: 10px;
+            font-size: 22px; font-weight: 700; text-transform: uppercase;
+        }
+        .auth-card p.subtitle {
+            text-align: center; font-size: 13px; color: #757575; margin-bottom: 24px;
+        }
+        .auth-switch {
+            text-align: center; margin-top: 15px; font-size: 13px; color: #616161;
+        }
+        .auth-switch span {
+            color: #d32f2f; font-weight: 600; cursor: pointer; text-decoration: underline;
+        }
+
+        /* Halaman Utama Keuangan */
+        #halamanUtama {
+            display: none; /* Disembunyikan, terbuka setelah sukses login */
+        }
+
+        header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 20px 16px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-bottom: 4px solid #ffffff;
+        }
+
+        header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        header p {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-top: 4px;
         }
 
         .container {
-            width: 100%;
-            max-width: 500px;
-        }
-
-        .card {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-            border: 1px solid #222;
-            margin-bottom: 20px;
-        }
-
-        h2 {
-            font-size: 20px;
-            margin-bottom: 20px;
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-color);
-            border-left: 4px solid var(--accent-color);
-            padding-left: 8px;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        label {
-            display: block;
-            font-size: 12px;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            margin-bottom: 6px;
-            letter-spacing: 0.5px;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 12px;
-            background-color: #080808;
-            border: 1px solid #333;
-            border-radius: 6px;
-            color: white;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 8px rgba(255, 51, 51, 0.2);
-        }
-
-        input[disabled] {
-            background-color: #1a1a1a;
-            color: var(--text-muted);
-            cursor: not-allowed;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 14px;
-            background-color: var(--accent-color);
-            border: none;
-            border-radius: 6px;
-            color: white;
-            font-weight: bold;
-            font-size: 14px;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
-            margin-top: 10px;
-        }
-
-        .btn:hover {
-            background-color: #e02e2e;
-            box-shadow: 0 4px 12px rgba(255, 51, 51, 0.3);
-        }
-
-        .btn:disabled {
-            background-color: #555;
-            cursor: not-allowed;
-            box-shadow: none;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px;
         }
 
         .nav-tabs {
             display: flex;
-            gap: 10px;
+            background: white;
+            border-radius: var(--radius);
+            padding: 6px;
             margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
         }
 
         .tab-btn {
             flex: 1;
-            padding: 12px;
-            background-color: #141414;
-            border: 1px solid #222;
-            color: var(--text-muted);
-            border-radius: 6px;
+            background: none;
+            border: none;
+            padding: 12px 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #757575;
             cursor: pointer;
-            font-weight: bold;
-            font-size: 12px;
-            text-transform: uppercase;
+            border-radius: 8px;
             transition: all 0.3s ease;
+            text-align: center;
         }
 
         .tab-btn.active {
-            background-color: var(--accent-color);
+            background: var(--primary-gradient);
             color: white;
-            border-color: var(--accent-color);
+            box-shadow: 0 4px 10px rgba(211, 47, 47, 0.3);
         }
 
         .tab-content {
@@ -154,155 +130,299 @@
             display: block;
         }
 
-        #statusMessage {
+        .card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .card h2 {
+            font-size: 18px;
+            color: #b71c1c;
+            margin-bottom: 20px;
+            border-left: 4px solid #d32f2f;
+            padding-left: 10px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #424242;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 15px;
+            background-color: #fafafa;
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #d32f2f;
+            background-color: #fff;
+        }
+
+        .info-box {
+            background: #ffebee;
+            border-left: 4px solid #d32f2f;
             padding: 12px;
             border-radius: 6px;
-            text-align: center;
+            margin-bottom: 15px;
             font-size: 13px;
-            margin-bottom: 16px;
-            display: none;
+            color: #c62828;
             font-weight: 500;
         }
 
-        .status-success { background-color: rgba(0, 255, 102, 0.1); color: var(--success-color); border: 1px solid var(--success-color); }
-        .status-error { background-color: rgba(255, 51, 51, 0.1); color: var(--accent-color); border: 1px solid var(--accent-color); }
-        .status-loading { background-color: rgba(255, 204, 0, 0.1); color: var(--warning-color); border: 1px solid var(--warning-color); }
-
-        .auth-footer {
-            text-align: center;
-            margin-top: 16px;
-            font-size: 13px;
-            color: var(--text-muted);
+        .btn-submit {
+            width: 100%;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(211, 47, 47, 0.2);
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .auth-footer a {
-            color: var(--accent-color);
-            text-decoration: none;
-            font-weight: bold;
+        .btn-submit:hover {
+            opacity: 0.95;
+            transform: translateY(-1px);
+        }
+
+        .btn-submit:disabled {
+            background: #bdbdbd;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        #statusMessage {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 24px;
+            border-radius: 30px;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            z-index: 10000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: none;
+            text-align: center;
+            max-width: 90%;
+        }
+
+        .status-success { background-color: #2e7d32; }
+        .status-error { background-color: #c62828; }
+        .status-loading { background-color: #0288d1; }
+
+        .footer-logo {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 12px;
+            color: #9e9e9e;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div id="statusMessage"></div>
-
-        <div id="gerbangAuth">
-            <div id="boxLogin" class="card">
-                <h2>MASUK SISTEM</h2>
-                <form id="formLogin" onsubmit="handleAuth(event, 'loginUser')">
-                    <div class="form-group">
-                        <label>ID KARYAWAN</label>
-                        <input type="text" id="login_user" placeholder="Contoh: EMP-001" required>
-                    </div>
-                    <div class="form-group">
-                        <label>KATA SANDI</label>
-                        <input type="password" id="login_sandi" placeholder="Masukkan Sandi Anda" required>
-                    </div>
-                    <button type="submit" id="btn_login" class="btn">MASUK</button>
-                </form>
-                <div class="auth-footer">
-                    Karyawan Baru? <a href="#" onclick="tukarAuth('daftar')">Daftar Di Sini</a>
+    <!-- ================= LAYAR GERBANG AUTH (LOGIN / DAFTAR) ================= -->
+    <div id="gerbangAuth">
+        <!-- FORM LOGIN -->
+        <div class="auth-card" id="boxLogin">
+            <h2>Masuk Sistem</h2>
+            <p class="subtitle">Steam MP 7000 Kontrol Operasional</p>
+            <form onsubmit="handleAuth(event, 'loginUser')">
+                <div class="form-group">
+                    <label>Username Admin</label>
+                    <input type="text" id="login_user" class="form-control" placeholder="Masukkan username" required>
                 </div>
-            </div>
-
-            <div id="boxDaftar" class="card" style="display: none;">
-                <h2>DAFTAR KARYAWAN</h2>
-                <form id="formDaftar" onsubmit="handleAuth(event, 'registerUser')">
-                    <div class="form-group">
-                        <label>NAMA LENGKAP KARYAWAN</label>
-                        <input type="text" id="reg_nama" placeholder="Masukkan Nama Sesuai KTP" required>
-                    </div>
-                    <button type="submit" id="btn_daftar" class="btn">DAFTARKAN</button>
-                </form>
-                <div class="auth-footer">
-                    Sudah Punya ID? <a href="#" onclick="tukarAuth('login')">Masuk Di Sini</a>
+                <div class="form-group">
+                    <label>Kata Sandi / PIN</label>
+                    <input type="password" id="login_sandi" class="form-control" placeholder="Masukkan sandi/PIN" required>
                 </div>
+                <button type="submit" class="btn-submit" id="btn_login">Masuk Sekarang</button>
+            </form>
+            <div class="auth-switch">
+                Belum punya akses? <span onclick="tukarAuth('daftar')">Daftar Akun Baru</span>
             </div>
         </div>
 
-        <div id="halamanUtama" style="display: none;">
-            <div class="nav-tabs">
-                <button class="tab-btn active" onclick="switchTab('input-pemasukan')">Pemasukan</button>
-                <button class="tab-btn" onclick="switchTab('input-pengeluaran')">Pengeluaran</button>
-            </div>
-
-            <div id="input-pemasukan" class="tab-content active">
-                <div class="card">
-                    <h2>INPUT PEMASUKAN UNIT</h2>
-                    <form id="formPemasukan" onsubmit="submitData(event, 'Pemasukan')">
-                        <div class="form-group">
-                            <label>Tanggal</label>
-                            <input type="date" id="tgl_pemasukan" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Cabang</label>
-                            <select id="cabang_pemasukan" required>
-                                <option value="Sukamulya 2">Sukamulya 2</option>
-                                <option value="Sukamulya 4">Sukamulya 4</option>
-                                <option value="Kresek 1">Kresek 1</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Jumlah Unit (Motor)</label>
-                            <input type="number" id="unit_pemasukan" placeholder="0" oninput="hitungKotor()" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Total Nominal Terhitung</label>
-                            <input type="hidden" id="nominal_pemasukan">
-                            <input type="text" id="nominal_pemasukan_display" value="Rp 0" disabled>
-                        </div>
-                        <div class="form-group">
-                            <label>Keterangan Tambahan</label>
-                            <textarea id="ket_pemasukan" rows="2" placeholder="Catatan operasional..."></textarea>
-                        </div>
-                        <button type="submit" id="btn_submit_pemasukan" class="btn">SIMPAN DATA</button>
-                    </form>
+        <!-- FORM DAFTAR -->
+        <div class="auth-card" id="boxDaftar" style="display: none;">
+            <h2>Daftar Akun</h2>
+            <p class="subtitle">Ajukan Akses Pengelolaan Tim Admin</p>
+            <form onsubmit="handleAuth(event, 'registerUser')">
+                <div class="form-group">
+                    <label>Nama Lengkap Anda</label>
+                    <input type="text" id="reg_nama" class="form-control" placeholder="Contoh: Budi Santoso" required>
                 </div>
-            </div>
-
-            <div id="input-pengeluaran" class="tab-content">
-                <div class="card">
-                    <h2>INPUT PENGELUARAN TOKO</h2>
-                    <form id="formPengeluaran" onsubmit="submitData(event, 'Pengeluaran')">
-                        <div class="form-group">
-                            <label>Tanggal</label>
-                            <input type="date" id="tgl_pengeluaran" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Cabang</label>
-                            <select id="cabang_pengeluaran" required>
-                                <option value="Sukamulya 2">Sukamulya 2</option>
-                                <option value="Sukamulya 4">Sukamulya 4</option>
-                                <option value="Kresek 1">Kresek 1</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Kategori Pengeluaran</label>
-                            <select id="kategori_pengeluaran" required>
-                                <option value="Beli Sabun / Semir">Beli Sabun / Semir</option>
-                                <option value="Listrik / Air">Listrik / Air</option>
-                                <option value="Maintenance Alat">Maintenance Alat</option>
-                                <option value="Lain-lain">Lain-lain</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Nominal Pengeluaran (Rp)</label>
-                            <input type="number" id="nominal_pengeluaran" placeholder="Contoh: 50000" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Keterangan Pengeluaran</label>
-                            <textarea id="ket_pengeluaran" rows="2" placeholder="Detail barang yang dibeli..." required></textarea>
-                        </div>
-                        <button type="submit" id="btn_submit_pengeluaran" class="btn">SIMPAN PENGELUARAN</button>
-                    </form>
+                <div class="form-group">
+                    <label>Buat Username Baru</label>
+                    <input type="text" id="reg_user" class="form-control" placeholder="Gunakan huruf kecil/angka" required>
                 </div>
+                <div class="form-group">
+                    <label>Buat Kata Sandi / PIN</label>
+                    <input type="password" id="reg_sandi" class="form-control" placeholder="Gunakan sandi yang aman" required>
+                </div>
+                <button type="submit" class="btn-submit" id="btn_daftar">Kirim Permohonan</button>
+            </form>
+            <div class="auth-switch">
+                Sudah terdaftar? <span onclick="tukarAuth('login')">Kembali ke Login</span>
             </div>
         </div>
     </div>
 
+
+    <!-- ================= HALAMAN UTAMA (TIDAK ADA PERUBAHAN DESAIN) ================= -->
+    <div id="halamanUtama">
+        <header>
+            <h1>STEAM MP 7000</h1>
+            <p>Sistem Input Keuangan & Manajemen 3 Cabang Utama</p>
+        </header>
+
+        <div class="container">
+            <div class="nav-tabs">
+                <button class="tab-btn active" onclick="switchTab('input-pemasukan')">Pemasukan</button>
+                <button class="tab-btn" onclick="switchTab('input-pengeluaran')">Pengeluaran</button>
+                <button class="tab-btn" onclick="switchTab('monitoring')">Akses GSheet</button>
+            </div>
+
+            <!-- TAB 1: INPUT PEMASUKAN -->
+            <div id="input-pemasukan" class="tab-content active">
+                <div class="card">
+                    <h2>Form Input Pemasukan Harian</h2>
+                    <form id="formPemasukan" onsubmit="submitData(event, 'Pemasukan')">
+                        <div class="form-group">
+                            <label>Tanggal Transaksi</label>
+                            <input type="date" id="tgl_pemasukan" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Cabang Operasional</label>
+                            <select id="cabang_pemasukan" class="form-control" required>
+                                <option value="" disabled selected>-- Pilih Cabang --</option>
+                                <option value="Cabang Grobogan">Cabang Grobogan</option>
+                                <option value="Cabang Palis">Cabang Palis</option>
+                                <option value="Cabang Cayur">Cabang Cayur</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Jumlah Unit Terjual (Motor/Mobil)</label>
+                            <input type="number" id="unit_pemasukan" class="form-control" placeholder="Contoh: 25" min="1" required oninput="hitungKotor()">
+                        </div>
+                        <div class="info-box">
+                            💡 Ketentuan Tarif: Pemasukan per Unit dihitung otomatis senilai <b>Rp 4.000</b> (Kotor Owner).
+                        </div>
+                        <div class="form-group">
+                            <label>Total Nominal Terhitung (Rp)</label>
+                            <input type="text" id="nominal_pemasukan_display" class="form-control" readonly style="font-weight: bold; color: var(--success-color); background-color: #edf7ed;" value="Rp 0">
+                            <input type="hidden" id="nominal_pemasukan">
+                        </div>
+                        <div class="form-group">
+                            <label>Keterangan Tambahan (Opsional)</label>
+                            <textarea id="ket_pemasukan" class="form-control" rows="2" placeholder="Contoh: Ramai lancar, cuaca mendung sore hari..."></textarea>
+                        </div>
+                        <button type="submit" id="btn_submit_pemasukan" class="btn-submit">Simpan Data Pemasukan</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- TAB 2: INPUT PENGELUARAN -->
+            <div id="input-pengeluaran" class="tab-content">
+                <div class="card">
+                    <h2>Form Input Pengeluaran Operasional</h2>
+                    <form id="formPengeluaran" onsubmit="submitData(event, 'Pengeluaran')">
+                        <div class="form-group">
+                            <label>Tanggal Transaksi</label>
+                            <input type="date" id="tgl_pengeluaran" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Cabang Terkait</label>
+                            <select id="cabang_pengeluaran" class="form-control" required>
+                                <option value="" disabled selected>-- Pilih Cabang --</option>
+                                <option value="Cabang Grobogan">Cabang Grobogan</option>
+                                <option value="Cabang Palis">Cabang Palis</option>
+                                <option value="Cabang Cayur">Cabang Cayur</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Kategori Pengeluaran</label>
+                            <select id="kategori_pengeluaran" class="form-control" required>
+                                <option value="" disabled selected>-- Pilih Kategori --</option>
+                                <option value="Beras Karyawan">Beras Karyawan</option>
+                                <option value="Kopi Karyawan">Kopi Karyawan</option>
+                                <option value="Listrik Token">Listrik Token</option>
+                                <option value="Sewa Ruko">Sewa Ruko</option>
+                                <option value="Sabun / Sampo Steam">Sabun / Sampo Steam</option>
+                                <option value="Perawatan Mesin">Perawatan Mesin</option>
+                                <option value="Lain-lain">Lain-lain / Operasional Non-Rutin</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Nominal Pengeluaran (Rp)</label>
+                            <input type="number" id="nominal_pengeluaran" class="form-control" placeholder="Contoh: 150000" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Detail Keterangan</label>
+                            <textarea id="ket_pengeluaran" class="form-control" rows="2" placeholder="Contoh: Pembelian beras 10kg untuk mes karyawan" required></textarea>
+                        </div>
+                        <button type="submit" id="btn_submit_pengeluaran" class="btn-submit">Simpan Data Pengeluaran</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- TAB 3: LIVE REKAP & MONITORING -->
+            <div id="monitoring" class="tab-content">
+                <div class="card">
+                    <h2>Akses Cepat Google Spreadsheet</h2>
+                    <div class="info-box" style="background-color: #e3f2fd; color: #0d47a1; border-left-color: #2196f3;">
+                        ℹ️ Seluruh input data di atas akan otomatis diproses, divalidasi, dan dihitung secara realtime ke dalam tabel <b>Laporan Bersih</b> dan log transaksi <b>Sheet1</b> pada Google Sheets Anda.
+                    </div>
+                    <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 12px;">
+                        <!-- LINK UPDATED: MENGGUNAKAN WEB APP URL TERBARU ANDA -->
+                        <a href="https://script.google.com/macros/s/AKfycbymyvyJju1OMeBnVgTzhkTLvD2IlRVlqboqTep7-BtOa7gejlM7cOXmRcPFwMvRL6IP/exec" target="_blank" class="btn-submit" style="text-align: center; text-decoration: none; background: #2e7d32;">
+                            🟢 Buka Aplikasi Web (Web App Exec)
+                        </a>
+                        <a href="https://docs.google.com/spreadsheets/d/1xIsUPc63ko_qQD0VZusaZdtUa34DXIp9j8kvwgHAD2U/edit?usp=sharing" target="_blank" class="btn-submit" style="text-align: center; text-decoration: none; background: #424242;">
+                            📊 Buka Spreadsheet Utama (Laporan & Sheet1)
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-logo">
+                Steam MP 7000 • Profesional & Akurat
+            </div>
+        </div>
+    </div>
+
+    <div id="statusMessage"></div>
+
     <script>
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxWBYtbeBe3-xH3R80axowIeVbI8n6fc-x3qwTbZammMY3dpsAOYR2y9DcD6R5AURaI/exec";
+        // SINKRONISASI LINK WEB APP UTAMA ANDA
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbymyvyJju1OMeBnVgTzhkTLvD2IlRVlqboqTep7-BtOa7gejlM7cOXmRcPFwMvRL6IP/exec";
 
         window.onload = function() {
             const today = new Date().toISOString().split('T')[0];
@@ -320,7 +440,6 @@
             }
         }
 
-        // HANDLING LOGIN & PENDAFTARAN KARYAWAN (ID OTOMATIS)
         function handleAuth(event, tipeAksi) {
             event.preventDefault();
             let prm = new URLSearchParams();
@@ -328,15 +447,15 @@
 
             if (tipeAksi === 'loginUser') {
                 document.getElementById('btn_login').disabled = true;
-                showStatus("Memeriksa ID & Akses...", "loading");
-                prm.append("username", document.getElementById('login_user').value); // ID Karyawan (EMP-XXX)
+                showStatus("Memeriksa akun...", "loading");
+                prm.append("username", document.getElementById('login_user').value);
                 prm.append("sandi", document.getElementById('login_sandi').value);
             } else {
                 document.getElementById('btn_daftar').disabled = true;
-                showStatus("Mendaftarkan karyawan baru...", "loading");
+                showStatus("Mengirim permohonan pendaftaran...", "loading");
                 prm.append("nama", document.getElementById('reg_nama').value);
-                prm.append("username", "AUTO_GENERATE");
-                prm.append("sandi", "PENDING_OWNER");
+                prm.append("username", document.getElementById('reg_user').value);
+                prm.append("sandi", document.getElementById('reg_sandi').value);
             }
 
             fetch(WEB_APP_URL, {
@@ -352,24 +471,20 @@
                         fetch(cekUrl).then(res => res.json()).then(resData => {
                             document.getElementById('btn_login').disabled = false;
                             if (resData.status === "success") {
-                                showStatus("Akses Diterima! Memuat Lembar Gaji...", "success");
+                                showStatus("Login Sukses! Selamat Bekerja.", "success");
                                 document.getElementById('gerbangAuth').style.display = 'none';
                                 document.getElementById('halamanUtama').style.display = 'block';
-                                
-                                // RENDER BENTUK KOTAK REKAP GAJI KARYAWAN SECARA PRIVAT
-                                tampilkanKotakGajiKaryawan(resData.gaji, resData.tarifUnit, resData.potonganWifi);
                             } else {
                                 showStatus(resData.message, "error");
                             }
                         }).catch(() => {
                             document.getElementById('btn_login').disabled = false;
-                            showStatus("ID belum AKTIF atau kombinasi Sandi salah.", "error");
+                            showStatus("Status akun belum AKTIF atau salah kata sandi.", "error");
                         });
                     } else {
                         document.getElementById('btn_daftar').disabled = false;
-                        showStatus("Pendaftaran Berhasil! ID dibuat otomatis. Menunggu Persetujuan & Set Sandi oleh Owner.", "success");
+                        showStatus("Pendaftaran terkirim! Status: PENDING. Hubungi Owner untuk aktivasi.", "success");
                         tukarAuth('login');
-                        document.getElementById('formDaftar').reset();
                     }
                 }, 1500);
             })
@@ -378,77 +493,6 @@
                 document.getElementById('btn_login').disabled = false;
                 document.getElementById('btn_daftar').disabled = false;
             });
-        }
-
-        // GENERATE KOTAK REKAP GAJI PRIVAT PERSIS FORMAT YANG ANDA INGINKAN
-        function tampilkanKotakGajiKaryawan(dataGaji, tarifUnit, potonganWifi) {
-            let totalUnit = 0, totalTips = 0, totalBonus = 0, totalKasbon = 0;
-            let jumlahHariKerja = dataGaji.length; // Menghitung total hari kerja aktif di sheet
-            
-            dataGaji.forEach(item => {
-                totalUnit += parseInt(item.unit);
-                totalTips += parseInt(item.tips);
-                totalBonus += parseInt(item.bonus);
-                totalKasbon += parseInt(item.kasbon);
-            });
-
-            // Hitungan Gaji Kotor ditarik otomatis dari parameter Pengaturan (3000)
-            let gajiKotorUnit = totalUnit * parseInt(tarifUnit); 
-            // Potongan WiFi wajib dikali jumlah hari kerja aktif dari database (1000/hari)
-            let totalPotonganWifi = jumlahHariKerja * parseInt(potonganWifi); 
-            let totalGajiBersih = (gajiKotorUnit + totalTips + totalBonus) - totalKasbon - totalPotonganWifi;
-            
-            // Layout Kotak Rekap Hitam Cantik Sesuai Request Gambar Tanpa Merubah CSS Utama
-            let htmlKotak = `
-                <div class="card" style="background: #111; color: #fff; border: 2px solid var(--accent-color); margin-bottom: 25px; padding: 20px; border-radius: 8px;">
-                    <h3 style="color: #fff; border-left: 4px solid var(--accent-color); padding-left: 10px; margin-bottom: 15px; font-size: 16px;">KOTAK REKAP REKENING GAJI PRIVAT</h3>
-                    <div style="overflow-x: auto;">
-                        <table style="width: 100%; border-collapse: collapse; min-width: 280px; color: #fff; font-size: 13px;">
-                            <thead>
-                                <tr style="border-bottom: 2px solid #333; text-align: left; background: #1a1a1a;">
-                                    <th style="padding: 10px 5px;">UNIT</th>
-                                    <th style="padding: 10px 5px;">TIPS</th>
-                                    <th style="padding: 10px 5px;">BONUS</th>
-                                    <th style="padding: 10px 5px;">KASBON</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr style="background: #222; border-bottom: 1px solid #333;">
-                                    <td style="padding: 12px 5px;">${totalUnit}</td>
-                                    <td style="padding: 12px 5px;">Rp ${totalTips.toLocaleString('id-ID')}</td>
-                                    <td style="padding: 12px 5px;">Rp ${totalBonus.toLocaleString('id-ID')}</td>
-                                    <td style="padding: 12px 5px; color: #ff5252;">Rp ${totalKasbon.toLocaleString('id-ID')}</td>
-                                </tr>
-                                <tr style="background: #fffb15; color: #000; font-weight: bold; border-bottom: 1px solid #333;">
-                                    <td style="padding: 10px 5px;">JUMLAH</td>
-                                    <td style="padding: 10px 5px;">${totalUnit}</td>
-                                    <td style="padding: 10px 5px;">${totalTips > 0 ? 'Ada' : '0'}</td>
-                                    <td style="padding: 10px 5px; color: #c62828;">- Rp ${totalKasbon.toLocaleString('id-ID')}</td>
-                                </tr>
-                                <tr style="background: #00e676; color: #000; font-weight: bold;">
-                                    <td style="padding: 12px 5px;">TOTAL</td>
-                                    <td style="padding: 12px 5px;">Rp ${totalGajiBersih.toLocaleString('id-ID')}</td>
-                                    <td colspan="2" style="padding: 12px 5px; font-size: 10px; background: #1a1a1a; color: #aaa; text-align: center; font-weight: normal; border: 1px solid #333;">
-                                        WIFI Rp ${parseInt(potonganWifi).toLocaleString('id-ID')} / Hari (${jumlahHariKerja} Hari Kerja = -Rp ${totalPotonganWifi.toLocaleString('id-ID')})
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            `;
-            
-            // Tempel di atas halaman agar karyawan langsung disambut kotak gajinya
-            let kontainerUtama = document.querySelector('.container');
-            if (kontainerUtama) {
-                kontainerUtama.insertAdjacentHTML('afterbegin', htmlKotak);
-            }
-            
-            // Karyawan biasa dikunci aksesnya agar tidak bisa input/melihat data operasional utama toko
-            let navTabs = document.querySelector('.nav-tabs');
-            let formInput = document.getElementById('input-pemasukan');
-            if (navTabs) navTabs.style.display = 'none';
-            if (formInput) formInput.style.display = 'none';
         }
 
         function switchTab(tabId) {
@@ -460,7 +504,7 @@
 
         function hitungKotor() {
             const unitInput = document.getElementById('unit_pemasukan').value;
-            const tarifPerUnit = 3000; // Log input kotor harian toko disesuaikan ke parameter 3000
+            const tarifPerUnit = 4000;
             const totalNominal = unitInput ? parseInt(unitInput) * tarifPerUnit : 0;
             document.getElementById('nominal_pemasukan').value = totalNominal;
             document.getElementById('nominal_pemasukan_display').value = "Rp " + totalNominal.toLocaleString('id-ID');
@@ -526,7 +570,7 @@
                 body: urlParams.toString()
             })
             .then(() => {
-                showStatus("Data " + tipeForm + " Berhasil Disimpan!", "success");
+                showStatus("Data " + tipeForm + " Berhasil Disimpan ke Google Sheets!", "success");
                 if (tipeForm === 'Pemasukan') {
                     document.getElementById('formPemasukan').reset();
                     document.getElementById('nominal_pemasukan_display').value = "Rp 0";
@@ -540,7 +584,7 @@
             })
             .catch(error => {
                 console.error("Error:", error);
-                showStatus("Gagal mengirim data.", "error");
+                showStatus("Gagal mengirim data. Periksa jaringan Anda.", "error");
                 btnSubmit.disabled = false;
             });
         }
